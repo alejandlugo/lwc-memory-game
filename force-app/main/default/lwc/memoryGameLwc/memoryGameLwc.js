@@ -15,6 +15,8 @@ export default class MemoryGameLwc extends LightningElement {
     totalTime='00:00'
     timerRef
 
+    showCongratulations = false
+
     cards=[
         {id:1, listClass:"card", type:'diamond', icon:'fa fa-diamond'},
         {id:2, listClass:"card", type:'plane', icon:'fa fa-paper-plane-o'},
@@ -41,6 +43,7 @@ export default class MemoryGameLwc extends LightningElement {
         this.totalTime='00:00'
         this.moves = 0
         this.score = 0
+        this.showCongratulations = false
         window.clearInterval(this.timerRef)
         let elem = this.template.querySelectorAll('.card')
         Array.from(elem).forEach(item=>{
@@ -77,6 +80,11 @@ export default class MemoryGameLwc extends LightningElement {
         return this.cards.length/2
     }
 
+    get gameRating(){
+        let stars =  this.moves<12 ? [1,2,3] : this.moves<=20 ? [1,2] : [1]
+        return this.matchedCard.length === this.cards.length ? stars :[]
+    }
+
     displayCard(event){
         let currCard = event.target
         currCard.classList.add("open", "show", "disabled")
@@ -108,6 +116,7 @@ export default class MemoryGameLwc extends LightningElement {
 
         if(this.matchedCard.length === this.cards.length){
             window.clearInterval(this.timerRef)
+            this.showCongratulations = true
         }
     }
 
